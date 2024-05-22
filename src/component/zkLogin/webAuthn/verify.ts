@@ -8,7 +8,6 @@ export const verify = async (
   tx: Uint8Array,
   signature: string | Uint8Array,
 ): Promise<void> => {
-
   const bytes = typeof signature === 'string' ? fromB64(signature) : signature;
   const txHash = sha256(tx);
   if (bytes[0] === 5) {
@@ -23,18 +22,24 @@ export const verify = async (
       );
       signedData.set(webAuthn.authenticatorData);
       signedData.set(clientDataHASH, webAuthn.authenticatorData.length);
-      console.log(
-        'challange',
-        Buffer.from(clientData.challenge, 'base64').equals(Buffer.from(txHash)),
+
+      const { publicKey, signature } = parseSerializedSignature(
+        typeof userSignature === 'string'
+          ? userSignature
+          : toB64(userSignature),
       );
 
-      const { publicKey, signature } = parseSerializedSignature(typeof userSignature === 'string' ? userSignature : toB64(userSignature));
-
       if (publicKey && signature) {
+        console.log(
+          'challange',
+          Buffer.from(clientData.challenge, 'base64').equals(Buffer.from(txHash)),
+        );  
         console.log(
           'signature',
           secp256r1.verify(signature, sha256(signedData), publicKey),
         );
+      } else {
+        console.log('fail');
       }
     }
   }
