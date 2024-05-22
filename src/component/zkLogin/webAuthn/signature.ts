@@ -61,7 +61,7 @@ export function getZkLoginSignature({
     inputs,
     maxEpoch,
     userSignature,
-    webAuthn,  // option for webAuthn
+    webAuthn, // option for webAuthn
   });
   const signatureBytes = new Uint8Array(bytes.length + 1);
   signatureBytes.set([SIGNATURE_SCHEME_TO_FLAG.ZkLogin]);
