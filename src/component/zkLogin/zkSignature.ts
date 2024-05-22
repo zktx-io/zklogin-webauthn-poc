@@ -10,7 +10,7 @@ export const getZkSignature = (
   userSignature: string | Uint8Array,
   webAuthn?: {
     authenticatorData: string;
-    clientData: string;
+    clientDataJSON: string;
   },
 ): string => {
   const decodedJwt = decodeJwt(jwt);
@@ -24,7 +24,6 @@ export const getZkSignature = (
       decodedJwt.sub,
       decodedJwt.aud as string,
     ).toString();
-
   return getZkLoginSignature({
     inputs: {
       ...JSON.parse(proof),

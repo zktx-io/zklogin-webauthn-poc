@@ -6,6 +6,7 @@ import { getAccountData, getWebAuthnData } from '../component/localStorage';
 import { useNavigate } from 'react-router-dom';
 import { webAuthnGet } from '../component/webAuthn/webAuthnGet';
 import { getZkSignature } from '../component/zkLogin/zkSignature';
+import { verify } from '../component/zkLogin/webAuthn/verify';
 
 export const Home = () => {
   const initialized = useRef<boolean>(false);
@@ -15,23 +16,24 @@ export const Home = () => {
     const webAuthnData = getWebAuthnData();
     const account = getAccountData();
     if (!!webAuthnData && !!account) {
-      const unsignedTx = '';
-      const { authenticatorData, clientData, signature } = await webAuthnGet(
-        'localhost',
-        webAuthnData.credentialId,
-        unsignedTx,
+      // TEST
+      const unsignedTx = Buffer.from(new Uint8Array(90).fill(2)).toString(
+        'base64',
       );
+      // TEST
+      const { authenticatorData, clientDataJSON, signature } =
+        await webAuthnGet('localhost', webAuthnData.credentialId, unsignedTx);
       if (webAuthnData.alg === -7) {
         const publicKey = new Secp256r1PublicKey(
           webAuthnData.publicKey,
         ).toRawBytes();
-        const userSignature = fromB64(signature);
-        const temp = new Uint8Array(
-          1 + userSignature.length + publicKey.length,
+        const temp = fromB64(signature);
+        const userSignature = new Uint8Array(
+          1 + temp.length + publicKey.length,
         );
-        temp.set([SIGNATURE_SCHEME_TO_FLAG.Secp256r1]);
-        temp.set(userSignature, 1);
-        temp.set(publicKey, 1 + signature.length);
+        userSignature.set([SIGNATURE_SCHEME_TO_FLAG.Secp256r1]); // alg: -7
+        userSignature.set(temp, 1);
+        userSignature.set(publicKey, 1 + temp.length);
 
         const zkSig = getZkSignature(
           account.jwt,
@@ -41,10 +43,10 @@ export const Home = () => {
           userSignature,
           {
             authenticatorData,
-            clientData,
+            clientDataJSON,
           },
         );
-        console.log(1, zkSig);
+        verify(Buffer.from(unsignedTx, 'base64'), zkSig);
       }
     }
   };

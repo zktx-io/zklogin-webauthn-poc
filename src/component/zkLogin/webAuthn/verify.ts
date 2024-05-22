@@ -1,50 +1,41 @@
 import { fromB64, toB64 } from '@mysten/bcs';
 import { parseSerializedSignature } from '@mysten/sui.js/cryptography';
-import { Secp256r1PublicKey } from '@mysten/sui.js/dist/cjs/keypairs/secp256r1';
 import { sha256 } from '@noble/hashes/sha256';
+import { secp256r1 } from '@noble/curves/p256';
+import { parseZkLoginSignature } from './signature';
 
-export const verify = (
+export const verify = async (
   tx: Uint8Array,
   signature: string | Uint8Array,
-  webAuthn: {
-    clientData: string | Uint8Array;
-    authenticatorData: string | Uint8Array;
-  },
-): boolean => {
-  const parsedSignature = parseSerializedSignature(
-    typeof signature === 'string' ? signature : toB64(signature),
-  );
+): Promise<void> => {
 
-  if (parsedSignature.signatureScheme === 'Secp256r1') {
-    const txHash = sha256(tx);
-    const authenticatorData =
-      typeof webAuthn.authenticatorData === 'string'
-        ? fromB64(webAuthn.authenticatorData)
-        : webAuthn.authenticatorData;
-    const clientDataHASH = sha256(
-      typeof webAuthn.clientData === 'string'
-        ? fromB64(webAuthn.clientData)
-        : webAuthn.clientData,
-    );
-    const clientData = JSON.parse(
-      Buffer.from(
-        typeof webAuthn.clientData === 'string'
-          ? fromB64(webAuthn.clientData)
-          : webAuthn.clientData,
-      ).toString(),
-    );
+  const bytes = typeof signature === 'string' ? fromB64(signature) : signature;
+  const txHash = sha256(tx);
+  if (bytes[0] === 5) {
+    const { webAuthn, userSignature } = parseZkLoginSignature(bytes.slice(1));
+    if (webAuthn) {
+      const clientDataHASH = sha256(Uint8Array.from(webAuthn.clientDataJSON));
+      const clientData = JSON.parse(
+        Buffer.from(webAuthn.clientDataJSON).toString(),
+      );
+      const signedData = new Uint8Array(
+        webAuthn.authenticatorData.length + clientDataHASH.length,
+      );
+      signedData.set(webAuthn.authenticatorData);
+      signedData.set(clientDataHASH, webAuthn.authenticatorData.length);
+      console.log(
+        'challange',
+        Buffer.from(clientData.challenge, 'base64').equals(Buffer.from(txHash)),
+      );
 
-    const pubKey = new Secp256r1PublicKey(parsedSignature.publicKey);
-    const message = new Uint8Array(
-      authenticatorData.length + clientDataHASH.length,
-    );
-    message.set(authenticatorData);
-    message.set(clientDataHASH, authenticatorData.length);
+      const { publicKey, signature } = parseSerializedSignature(typeof userSignature === 'string' ? userSignature : toB64(userSignature));
 
-    console.log(
-      Buffer.from(clientData.challange, 'base64').equals(Buffer.from(txHash)),
-    );
-    console.log(pubKey.verify(message, parsedSignature.signature));
+      if (publicKey && signature) {
+        console.log(
+          'signature',
+          secp256r1.verify(signature, sha256(signedData), publicKey),
+        );
+      }
+    }
   }
-  return false;
 };

@@ -7,7 +7,7 @@ export const webAuthnGet = async (
   unsignedTx: string,
 ): Promise<{
   authenticatorData: string;
-  clientData: string;
+  clientDataJSON: string;
   signature: string;
 }> => {
   const challenge = sha256(fromB64(unsignedTx));
@@ -40,7 +40,7 @@ export const webAuthnGet = async (
     authenticatorData: toB64(
       new Uint8Array(credential.response.authenticatorData),
     ),
-    clientData: toB64(new Uint8Array(credential.response.clientDataJSON)),
+    clientDataJSON: toB64(new Uint8Array(credential.response.clientDataJSON)),
     signature: toB64(new Uint8Array(credential.response.signature)),
   };
 };

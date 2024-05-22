@@ -1,15 +1,15 @@
 import { fromB64, toB64 } from '@mysten/bcs';
 import { SIGNATURE_SCHEME_TO_FLAG } from '@mysten/sui.js/cryptography';
-import { ZkLoginSignature, zkLoginSignature } from './bcs';
+import { zkLoginSignature } from './bcs';
 
 // https://github.com/MystenLabs/sui/blob/main/sdk/typescript/src/zklogin/signature.ts
-interface ZkLoginSignatureExtended
-  extends Pick<ZkLoginSignature, 'inputs' | 'maxEpoch'> {
-  userSignature: string | ZkLoginSignature['userSignature'];
-
+interface ZkLoginSignatureExtended {
+  inputs: any;
+  maxEpoch: any;
+  userSignature: string | Uint8Array;
   // option for webAuthn
   webAuthn?: {
-    clientData: string | Uint8Array;
+    clientDataJSON: string | Uint8Array;
     authenticatorData: string | Uint8Array;
   };
   // option for webAuthn
@@ -35,10 +35,10 @@ function getZkLoginSignatureBytes({
         webAuthn: !webAuthn
           ? webAuthn
           : {
-              clientData:
-                typeof webAuthn.clientData === 'string'
-                  ? fromB64(webAuthn.clientData)
-                  : webAuthn.clientData,
+              clientDataJSON:
+                typeof webAuthn.clientDataJSON === 'string'
+                  ? fromB64(webAuthn.clientDataJSON)
+                  : webAuthn.clientDataJSON,
               authenticatorData:
                 typeof webAuthn.authenticatorData === 'string'
                   ? fromB64(webAuthn.authenticatorData)
