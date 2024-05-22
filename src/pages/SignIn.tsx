@@ -45,6 +45,7 @@ export const SignIn = () => {
         );
         const address = jwtToAddress(jwt, BigInt(salt));
         setAccountData({ maxEpoch: nonce.maxEpoch, jwt, proof, salt, address });
+        navigate('/');
       } else {
         alert('error');
         navigate('/sign-up');
