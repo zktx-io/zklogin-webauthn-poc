@@ -1,6 +1,7 @@
 import { fromB64, toB64 } from '@mysten/bcs';
 import { parseSerializedSignature } from '@mysten/sui.js/cryptography';
 import { sha256 } from '@noble/hashes/sha256';
+import { Secp256r1PublicKey } from '@mysten/sui.js/keypairs/secp256r1';
 import { secp256r1 } from '@noble/curves/p256';
 import { parseZkLoginSignature } from './signature';
 
@@ -32,12 +33,16 @@ export const verify = async (
       if (publicKey && signature) {
         console.log(
           'challange',
-          Buffer.from(clientData.challenge, 'base64').equals(Buffer.from(txHash)),
-        );  
+          Buffer.from(clientData.challenge, 'base64').equals(
+            Buffer.from(txHash),
+          ),
+        );
         console.log(
           'signature',
           secp256r1.verify(signature, sha256(signedData), publicKey),
         );
+        const pubKey = new Secp256r1PublicKey(publicKey);
+        console.log('signature', await pubKey.verify(signedData, signature));
       } else {
         console.log('fail');
       }

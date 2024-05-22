@@ -1,7 +1,4 @@
 import { useEffect, useRef } from 'react';
-import { Secp256r1PublicKey } from '@mysten/sui.js/keypairs/secp256r1';
-import { fromB64 } from '@mysten/bcs';
-import { SIGNATURE_SCHEME_TO_FLAG } from '@mysten/sui.js/cryptography';
 import { getAccountData, getWebAuthnData } from '../component/localStorage';
 import { useNavigate } from 'react-router-dom';
 import { webAuthnGet } from '../component/webAuthn/webAuthnGet';
@@ -22,25 +19,14 @@ export const Home = () => {
       );
       // TEST
       const { authenticatorData, clientDataJSON, signature } =
-        await webAuthnGet('localhost', webAuthnData.credentialId, unsignedTx);
+        await webAuthnGet('localhost', webAuthnData, unsignedTx);
       if (webAuthnData.alg === -7) {
-        const publicKey = new Secp256r1PublicKey(
-          webAuthnData.publicKey,
-        ).toRawBytes();
-        const temp = fromB64(signature);
-        const userSignature = new Uint8Array(
-          1 + temp.length + publicKey.length,
-        );
-        userSignature.set([SIGNATURE_SCHEME_TO_FLAG.Secp256r1]); // alg: -7
-        userSignature.set(temp, 1);
-        userSignature.set(publicKey, 1 + temp.length);
-
         const zkSig = getZkSignature(
           account.jwt,
           account.proof,
           account.salt,
           account.maxEpoch,
-          userSignature,
+          signature,
           {
             authenticatorData,
             clientDataJSON,

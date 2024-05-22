@@ -1,5 +1,5 @@
-import { toB64 } from '@mysten/sui.js/utils';
-import keyutil from 'js-crypto-key-utils';
+import { toB64, toHEX } from '@mysten/sui.js/utils';
+import { secp256r1 } from '@noble/curves/p256';
 
 export const webAuthnCreate = async (
   rpId: string,
@@ -29,16 +29,18 @@ export const webAuthnCreate = async (
     },
   });
   if (credential) {
-    const keyObjFromJwk = new keyutil.Key(
-      'der',
-      new Uint8Array((credential as any).response.getPublicKey()),
+    const key = await window.crypto.subtle.importKey(
+      'spki',
+      (credential as any).response.getPublicKey(),
+      { name: 'ECDSA', namedCurve: 'P-256' },
+      true,
+      ['verify'],
     );
-    const publicKey = (await keyObjFromJwk.export('oct', {
-      outputPublic: true,
-      compact: true,
-    })) as Uint8Array;
+    const compressedPubkey = secp256r1.ProjectivePoint.fromHex(
+      toHEX(new Uint8Array(await window.crypto.subtle.exportKey('raw', key))),
+    ).toRawBytes(true);
     return {
-      publicKey: toB64(publicKey),
+      publicKey: toB64(compressedPubkey),
       alg,
       credentialId: credential.id,
     };
