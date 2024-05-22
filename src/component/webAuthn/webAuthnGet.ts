@@ -25,7 +25,12 @@ export const webAuthnGet = async (
       allowCredentials: [
         {
           type: 'public-key',
-          id: fromB64(credentialId),
+          id: fromB64(
+            credentialId
+              .replace(/-/g, '+')
+              .replace(/_/g, '/')
+              .replace(/\s/g, ''),
+          ),
         },
       ],
     },
