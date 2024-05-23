@@ -30,6 +30,10 @@ export const getProviderUrl = async (
   const nonce = generateNonce(ephemeralPublicKey, maxEpoch, randomness);
   const clientId = process.env.REACT_APP_CLIENT_ID;
   const redirect = process.env.REACT_APP_REDIRECT;
+
+  alert(`${clientId}, ${redirect}, ${ephemeralPublicKey}`)
+  alert(`https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirect}&response_type=id_token&nonce=${nonce}&scope=openid`)
+
   return {
     url: `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirect}&response_type=id_token&nonce=${nonce}&scope=openid`,
     randomness,
