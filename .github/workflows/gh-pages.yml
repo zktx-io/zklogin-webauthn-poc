@@ -27,9 +27,9 @@ jobs:
         run: |
           echo "REACT_APP_KEY =$REACT_APP_PUBLIC_KEY" >> .env
           env:  
-            REACT_APP_CLIENT_ID: ${{secrets.REACT_APP_CLIENT_ID}}
-            REACT_APP_REDIRECT: ${{env.REACT_APP_REDIRECT}}
-            REACT_APP_RELYING_PARTY_ID: ${{env.REACT_APP_RELYING_PARTY_ID}}
+            REACT_APP_CLIENT_ID: ${{ env.REACT_APP_CLIENT_ID }}
+            REACT_APP_REDIRECT: ${{ env.REACT_APP_REDIRECT }}
+            REACT_APP_RELYING_PARTY_ID: ${{ env.REACT_APP_RELYING_PARTY_ID }}
 
       - name: Cache node_modules
         id: cache
