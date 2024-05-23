@@ -1,7 +1,11 @@
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fromB64, toB64 } from '@mysten/bcs';
-import { getAccountData, getWebAuthnData } from '../component/localStorage';
+import {
+  getAccountData,
+  getWebAuthnData,
+  signOut,
+} from '../component/localStorage';
 import { webAuthnGet } from '../component/webAuthn/webAuthnGet';
 import { getZkSignature } from '../component/zkLogin/zkSignature';
 import { verify } from '../component/zkLogin/webAuthn/verify';
@@ -36,6 +40,11 @@ export const Home = () => {
     }
   };
 
+  const handleSignOut = () => {
+    signOut();
+    navigate('/sign-up');
+  };
+
   useEffect(() => {
     const init = () => {
       initialized.current = true;
@@ -52,6 +61,7 @@ export const Home = () => {
       <img src={'/logo.png'} className="App-logo" alt="logo" />
       <h1>zkLogin + WebAuthn PoC</h1>
       <button onClick={handleSignAndVerification}>sign and verification</button>
+      <button onClick={handleSignOut}>sign out</button>
       <h2>Home</h2>
     </>
   );

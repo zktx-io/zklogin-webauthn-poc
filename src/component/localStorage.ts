@@ -51,3 +51,7 @@ export const setAccountData = (data: {
   localStorage.removeItem('nonce');
   localStorage.setItem('account', JSON.stringify(data));
 };
+
+export const signOut = () => {
+  localStorage.clear();
+};
