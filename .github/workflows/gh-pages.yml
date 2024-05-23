@@ -34,9 +34,9 @@ jobs:
 
       - name: Setting .env
         run: |
-          echo "REACT_APP_RELYING_PARTY_ID=${{ env.REACT_APP_RELYING_PARTY_ID }}" >> .env
-          echo "REACT_APP_REDIRECT=${{ env.REACT_APP_REDIRECT }}" >> .env
-          echo "REACT_APP_CLIENT_ID=${{ env.REACT_APP_CLIENT_ID }}" >> .env
+          echo "REACT_APP_RELYING_PARTY_ID=${{ secrets.REACT_APP_RELYING_PARTY_ID }}" >> .env
+          echo "REACT_APP_REDIRECT=${{ secrets.REACT_APP_REDIRECT }}" >> .env
+          echo "REACT_APP_CLIENT_ID=${{ secrets.REACT_APP_CLIENT_ID }}" >> .env
 
       - name: Install dependencies
         run: npm install
