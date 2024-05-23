@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
-import { getAccountData, getWebAuthnData } from '../component/localStorage';
 import { useNavigate } from 'react-router-dom';
+import { fromB64, toB64 } from '@mysten/bcs';
+import { getAccountData, getWebAuthnData } from '../component/localStorage';
 import { webAuthnGet } from '../component/webAuthn/webAuthnGet';
 import { getZkSignature } from '../component/zkLogin/zkSignature';
 import { verify } from '../component/zkLogin/webAuthn/verify';
@@ -14,9 +15,7 @@ export const Home = () => {
     const account = getAccountData();
     if (!!webAuthnData && !!account) {
       // TEST
-      const unsignedTx = Buffer.from(new Uint8Array(90).fill(2)).toString(
-        'base64',
-      );
+      const unsignedTx = toB64(new Uint8Array(90).fill(2));
       // TEST
       const { authenticatorData, clientDataJSON, signature } =
         await webAuthnGet(webAuthnData, unsignedTx);
@@ -32,7 +31,7 @@ export const Home = () => {
             clientDataJSON,
           },
         );
-        verify(Buffer.from(unsignedTx, 'base64'), zkSig);
+        verify(fromB64(unsignedTx), zkSig);
       }
     }
   };

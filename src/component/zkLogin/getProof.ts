@@ -19,7 +19,7 @@ export const getProof = async (
       extendedEphemeralPublicKey: getExtendedEphemeralPublicKey(publicKey),
       maxEpoch,
       jwtRandomness: randomness,
-      salt: Buffer.from(salt.replace('0x', '')).toString('base64'),
+      salt,
       keyClaimName: 'sub',
     }),
   });

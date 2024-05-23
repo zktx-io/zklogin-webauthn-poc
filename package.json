@@ -50,7 +50,9 @@
     ]
   },
   "devDependencies": {
+    "buffer": "^6.0.3",
     "prettier": "^3.2.5",
-    "react-app-rewired": "^2.2.1"
+    "react-app-rewired": "^2.2.1",
+    "webpack": "^5.91.0"
   }
 }
