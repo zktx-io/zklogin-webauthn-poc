@@ -39,7 +39,7 @@ export const SignUp = () => {
   return (
     <>
       <img src={'/logo.png'} className="App-logo" alt="logo" />
-      <h1>zkLogin WebAuthn POC</h1>
+      <h1>zkLogin + WebAuthn PoC</h1>
       <button onClick={handleRegistration}>registration</button>
       <h2>Sign Up</h2>
     </>

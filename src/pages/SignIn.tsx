@@ -66,7 +66,7 @@ export const SignIn = () => {
   return (
     <>
       <img src={'/logo.png'} className="App-logo" alt="logo" />
-      <h1>zkLogin WebAuthn POC</h1>
+      <h1>zkLogin + WebAuthn PoC</h1>
       <h2>Sign In</h2>
     </>
   );

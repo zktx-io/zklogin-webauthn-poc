@@ -1,6 +1,6 @@
 {
   "short_name": "zktx.io",
-  "name": "zklogin with WebAuthn POC",
+  "name": "zklogin + WebAuthn PoC",
   "icons": [
     {
       "src": "favicon.ico",
