@@ -43,8 +43,10 @@ export const verify = async (
         );
         const pubKey = new Secp256r1PublicKey(publicKey);
         console.log('signature', await pubKey.verify(signedData, signature));
+
+        alert('challange & signature verify success');
       } else {
-        console.log('fail');
+        alert('challange & signature verify fail');
       }
     }
   }
