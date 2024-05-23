@@ -1,7 +1,7 @@
 import { generateNonce, generateRandomness } from '@mysten/zklogin';
 import { Secp256r1PublicKey } from '@mysten/sui.js/keypairs/secp256r1';
 
-import { ClientId, Redirect, Rpc } from './config';
+import { Rpc } from './config';
 
 export const getProviderUrl = async (
   publicKey: string,
@@ -29,8 +29,10 @@ export const getProviderUrl = async (
   const maxEpoch = Number(result.epoch) + 10;
   const randomness = generateRandomness();
   const nonce = generateNonce(ephemeralPublicKey, maxEpoch, randomness);
+  const clientId = process.env.REACT_APP_CLIENT_ID;
+  const redirect = process.env.REACT_APP_REDIRECT;
   return {
-    url: `https://accounts.google.com/o/oauth2/v2/auth?client_id=${ClientId}&redirect_uri=${Redirect}&response_type=id_token&nonce=${nonce}&scope=openid`,
+    url: `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirect}&response_type=id_token&nonce=${nonce}&scope=openid`,
     randomness,
     maxEpoch,
   };
