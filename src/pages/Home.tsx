@@ -44,11 +44,7 @@ export const Home = () => {
     const init = () => {
       initialized.current = true;
       if (!getAccountData()) {
-        if (!!getNonceData()) {
-          navigate('/sign-in');
-        } else {
-          navigate('/sign-up');
-        }
+        navigate('/sign-up');
       }
     };
     !initialized.current && init();
