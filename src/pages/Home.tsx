@@ -19,7 +19,7 @@ export const Home = () => {
       );
       // TEST
       const { authenticatorData, clientDataJSON, signature } =
-        await webAuthnGet('localhost', webAuthnData, unsignedTx);
+        await webAuthnGet(webAuthnData, unsignedTx);
       if (webAuthnData.alg === -7) {
         const zkSig = getZkSignature(
           account.jwt,

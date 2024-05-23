@@ -5,7 +5,6 @@ import { sha256 } from '@noble/hashes/sha256';
 import { secp256r1 } from '@noble/curves/p256';
 
 export const webAuthnGet = async (
-  rpId: string,
   webAuthn: {
     credentialId: string;
     publicKey: string;
@@ -26,7 +25,7 @@ export const webAuthnGet = async (
   } = (await navigator.credentials.get({
     publicKey: {
       challenge,
-      rpId,
+      rpId: process.env.REACT_APP_RELYING_PARTY_ID,
       userVerification: 'preferred',
       allowCredentials: [
         {

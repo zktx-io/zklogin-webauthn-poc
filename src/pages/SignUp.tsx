@@ -16,8 +16,7 @@ export const SignUp = () => {
   const handleRegistration = async () => {
     let data = getWebAuthnData();
     if (!data) {
-      const { credentialId, alg, publicKey } =
-        await webAuthnCreate('localhost');
+      const { credentialId, alg, publicKey } = await webAuthnCreate();
       setWebAuthnData({ credentialId, alg, publicKey });
       data = { credentialId, alg, publicKey };
     }

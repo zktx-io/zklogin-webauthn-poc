@@ -1,16 +1,18 @@
 import { toB64, toHEX } from '@mysten/sui.js/utils';
 import { secp256r1 } from '@noble/curves/p256';
 
-export const webAuthnCreate = async (
-  rpId: string,
-): Promise<{ credentialId: string; alg: number; publicKey: string }> => {
+export const webAuthnCreate = async (): Promise<{
+  credentialId: string;
+  alg: number;
+  publicKey: string;
+}> => {
   const alg = -7; // Secp256r1
   const credential = await navigator.credentials.create({
     publicKey: {
       challenge: crypto.getRandomValues(new Uint8Array(32)),
       rp: {
-        id: rpId,
-        name: rpId,
+        id: process.env.REACT_APP_RELYING_PARTY_ID,
+        name: 'Ephemeral Key',
       },
       user: {
         id: new Uint8Array(32).fill(1),
