@@ -22,6 +22,7 @@ export const SignUp = () => {
     }
     const { url, maxEpoch, randomness } = await getProviderUrl(data.publicKey);
     setNonceData({ maxEpoch, randomness });
+    alert(url);
     window.location.replace(url);
   };
 
