@@ -1,7 +1,11 @@
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fromB64, toB64 } from '@mysten/bcs';
-import { getAccountData, getWebAuthnData } from '../component/localStorage';
+import {
+  getAccountData,
+  getNonceData,
+  getWebAuthnData,
+} from '../component/localStorage';
 import { webAuthnGet } from '../component/webAuthn/webAuthnGet';
 import { getZkSignature } from '../component/zkLogin/zkSignature';
 import { verify } from '../component/zkLogin/webAuthn/verify';
@@ -40,7 +44,11 @@ export const Home = () => {
     const init = () => {
       initialized.current = true;
       if (!getAccountData()) {
-        navigate('/sign-up');
+        if (!!getNonceData()) {
+          navigate('/sign-in');
+        } else {
+          navigate('/sign-up');
+        }
       }
     };
     !initialized.current && init();

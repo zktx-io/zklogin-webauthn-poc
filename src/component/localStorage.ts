@@ -20,7 +20,6 @@ export const getNonceData = (): null | {
   randomness: string;
 } => {
   const data = localStorage.getItem('nonce');
-  data && localStorage.removeItem('nonce');
   return !data ? data : JSON.parse(data);
 };
 
@@ -49,5 +48,6 @@ export const setAccountData = (data: {
   salt: string;
   address: string;
 }) => {
+  localStorage.removeItem('nonce');
   localStorage.setItem('account', JSON.stringify(data));
 };
