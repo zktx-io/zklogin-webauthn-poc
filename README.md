@@ -43,7 +43,7 @@ To support WebAuthn in zkLogin, the following two options are proposed:
 
 ### Authentication Flow
 
-![process](../public/process.svg)
+![process](./public/process.svg)
 
 - **User Authentication:**
   - Use OpenID for initial user authentication.
