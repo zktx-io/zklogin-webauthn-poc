@@ -1,15 +1,15 @@
-| SIP-Number          | <Leave this blank; it will be assigned by a SIP Editor> |
-| ---:                | :--- |
-| Title               | Adding WebAuthn Support to zkLogin |
-| Description         | Proposes adding WebAuthn support to zkLogin for enhanced security and convenience. |
-| Author              | DaoAuth |
-| Editor              | <Leave this blank; it will be assigned by a SIP Editor> |
-| Type                | Standard |
-| Category            | Interface |
-| Created             | 2024-05-21 |
-| Comments-URI        | <Leave this blank; it will be assigned by a SIP Editor> |
-| Status              | <Leave this blank; it will be assigned by a SIP Editor> |
-| Requires            | <Optional; SIP number(s), comma separated> |
+|   SIP-Number | <Leave this blank; it will be assigned by a SIP Editor>                            |
+| -----------: | :--------------------------------------------------------------------------------- |
+|        Title | Adding WebAuthn Support to zkLogin                                                 |
+|  Description | Proposes adding WebAuthn support to zkLogin for enhanced security and convenience. |
+|       Author | DaoAuth                                                                            |
+|       Editor | <Leave this blank; it will be assigned by a SIP Editor>                            |
+|         Type | Standard                                                                           |
+|     Category | Interface                                                                          |
+|      Created | 2024-05-21                                                                         |
+| Comments-URI | <Leave this blank; it will be assigned by a SIP Editor>                            |
+|       Status | <Leave this blank; it will be assigned by a SIP Editor>                            |
+|     Requires | <Optional; SIP number(s), comma separated>                                         |
 
 ## Abstract
 
@@ -36,6 +36,7 @@ WebAuthn offers a robust solution to this issue. By integrating WebAuthn, epheme
 To support WebAuthn in zkLogin, the following two options are proposed:
 
 1. **Add a new schema for WebAuthn signatures in the [Signatures](https://docs.sui.io/concepts/cryptography/transaction-auth/signatures) module:**
+
    - Define a new signature type for WebAuthn that accommodates the specific data structures used in WebAuthn authentication, such as `algorithm`, `authenticatorData`, and `clientDataJSON`.
 
 2. **Introduce optional attributes in zkLogin to support WebAuthn:**
