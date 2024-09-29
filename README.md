@@ -1,3 +1,5 @@
+![sui-overflow-2024-2](https://github.com/user-attachments/assets/6f325d33-baca-4adc-8723-333f67895e05)
+
 |   SIP-Number | <Leave this blank; it will be assigned by a SIP Editor>                            |
 | -----------: | :--------------------------------------------------------------------------------- |
 |        Title | Adding WebAuthn Support to zkLogin                                                 |
