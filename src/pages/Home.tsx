@@ -1,6 +1,7 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { fromB64, toB64 } from '@mysten/bcs';
+import { fromBase64, toBase64 } from '@mysten/bcs';
+import { getFullnodeUrl, SuiClient } from '@mysten/sui/client';
 import {
   getAccountData,
   getWebAuthnData,
@@ -13,13 +14,15 @@ import { verify } from '../component/zkLogin/webAuthn/verify';
 export const Home = () => {
   const initialized = useRef<boolean>(false);
   const navigate = useNavigate();
+  const [address, setAddress] = useState<string>('n/a');
+  const [balance, setBalance] = useState<string>('n/a');
 
   const handleSignAndVerification = async () => {
     const webAuthnData = getWebAuthnData();
     const account = getAccountData();
     if (!!webAuthnData && !!account) {
       // TEST
-      const unsignedTx = toB64(new Uint8Array(90).fill(2));
+      const unsignedTx = toBase64(new Uint8Array(90).fill(2));
       // TEST
       const { authenticatorData, clientDataJSON, signature } =
         await webAuthnGet(webAuthnData, unsignedTx);
@@ -35,7 +38,7 @@ export const Home = () => {
             clientDataJSON,
           },
         );
-        verify(fromB64(unsignedTx), zkSig);
+        verify(fromBase64(unsignedTx), zkSig);
       }
     }
   };
@@ -46,10 +49,18 @@ export const Home = () => {
   };
 
   useEffect(() => {
-    const init = () => {
+    const init = async () => {
       initialized.current = true;
-      if (!getAccountData()) {
+      const account = getAccountData();
+      if (!account) {
         navigate('/sign-up');
+      } else {
+        setAddress(account.address);
+        const client = new SuiClient({ url: getFullnodeUrl('devnet') });
+        const temp = await client.getBalance({
+          owner: account.address,
+        });
+        setBalance(temp.totalBalance);
       }
     };
     !initialized.current && init();
@@ -63,6 +74,12 @@ export const Home = () => {
       <button onClick={handleSignAndVerification}>sign and verification</button>
       <button onClick={handleSignOut}>sign out</button>
       <h2>Home</h2>
+      <div>
+        <p style={{ marginBottom: '0px', fontSize: '24px' }}>Address</p>
+        <p style={{ marginTop: '0px', fontSize: '16px' }}>{address}</p>
+        <p style={{ marginBottom: '0px', fontSize: '24px' }}>Balance</p>
+        <p style={{ marginTop: '0px', fontSize: '16px' }}>{balance}</p>
+      </div>
     </>
   );
 };

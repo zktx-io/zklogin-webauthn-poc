@@ -1,6 +1,6 @@
-import { fromB64, toB64 } from '@mysten/bcs';
-import { SIGNATURE_SCHEME_TO_FLAG } from '@mysten/sui.js/cryptography';
-import { Secp256r1PublicKey } from '@mysten/sui.js/keypairs/secp256r1';
+import { fromBase64, toBase64 } from '@mysten/bcs';
+import { SIGNATURE_SCHEME_TO_FLAG } from '@mysten/sui/cryptography';
+import { Secp256r1PublicKey } from '@mysten/sui/keypairs/secp256r1';
 import { sha256 } from '@noble/hashes/sha256';
 import { secp256r1 } from '@noble/curves/p256';
 
@@ -15,7 +15,7 @@ export const webAuthnGet = async (
   clientDataJSON: string;
   signature: string;
 }> => {
-  const challenge = sha256(fromB64(unsignedTx));
+  const challenge = sha256(fromBase64(unsignedTx));
   const credential: {
     response: {
       authenticatorData: ArrayBuffer;
@@ -30,7 +30,7 @@ export const webAuthnGet = async (
       allowCredentials: [
         {
           type: 'public-key',
-          id: fromB64(
+          id: fromBase64(
             webAuthn.credentialId
               .replace(/-/g, '+')
               .replace(/_/g, '/')
@@ -51,10 +51,12 @@ export const webAuthnGet = async (
   userSignature.set(publicKey, 1 + signature.length);
 
   return {
-    authenticatorData: toB64(
+    authenticatorData: toBase64(
       new Uint8Array(credential.response.authenticatorData),
     ),
-    clientDataJSON: toB64(new Uint8Array(credential.response.clientDataJSON)),
-    signature: toB64(userSignature),
+    clientDataJSON: toBase64(
+      new Uint8Array(credential.response.clientDataJSON),
+    ),
+    signature: toBase64(userSignature),
   };
 };

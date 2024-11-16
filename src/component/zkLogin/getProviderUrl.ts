@@ -1,8 +1,8 @@
 import { generateNonce, generateRandomness } from '@mysten/zklogin';
-import { Secp256r1PublicKey } from '@mysten/sui.js/keypairs/secp256r1';
+import { Secp256r1PublicKey } from '@mysten/sui/keypairs/secp256r1';
 
 import { Rpc } from './config';
-import { fromB64 } from '@mysten/bcs';
+import { fromBase64 } from '@mysten/bcs';
 
 export const getProviderUrl = async (
   publicKey: string,
@@ -11,7 +11,7 @@ export const getProviderUrl = async (
   randomness: string;
   maxEpoch: number;
 }> => {
-  const ephemeralPublicKey = new Secp256r1PublicKey(fromB64(publicKey));
+  const ephemeralPublicKey = new Secp256r1PublicKey(fromBase64(publicKey));
 
   const res = await fetch(Rpc, {
     method: 'POST',

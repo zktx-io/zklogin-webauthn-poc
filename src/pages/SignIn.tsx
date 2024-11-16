@@ -1,8 +1,8 @@
 import queryString from 'query-string';
 import { useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { fromB64 } from '@mysten/bcs';
-import { Secp256r1PublicKey } from '@mysten/sui.js/keypairs/secp256r1';
+import { fromBase64 } from '@mysten/bcs';
+import { Secp256r1PublicKey } from '@mysten/sui/keypairs/secp256r1';
 import { jwtToAddress } from '@mysten/zklogin';
 import {
   getAccountData,
@@ -33,7 +33,7 @@ export const SignIn = () => {
       const nonce = getNonceData();
       if (!!nonce && !!webAuthn) {
         const ephemeralPublicKey = new Secp256r1PublicKey(
-          fromB64(webAuthn.publicKey),
+          fromBase64(webAuthn.publicKey),
         );
 
         const salt = '1'; // temp

@@ -1,6 +1,6 @@
 import { getExtendedEphemeralPublicKey } from '@mysten/zklogin';
 import { prover } from './config';
-import { PublicKey } from '@mysten/sui.js/cryptography';
+import { PublicKey } from '@mysten/sui/cryptography';
 
 export const getProof = async (
   jwt: string,

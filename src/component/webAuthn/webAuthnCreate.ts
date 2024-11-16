@@ -1,4 +1,4 @@
-import { toB64, toHEX } from '@mysten/sui.js/utils';
+import { toBase64, toHex } from '@mysten/bcs';
 import { secp256r1 } from '@noble/curves/p256';
 
 export const webAuthnCreate = async (): Promise<{
@@ -39,10 +39,10 @@ export const webAuthnCreate = async (): Promise<{
       ['verify'],
     );
     const compressedPubkey = secp256r1.ProjectivePoint.fromHex(
-      toHEX(new Uint8Array(await window.crypto.subtle.exportKey('raw', key))),
+      toHex(new Uint8Array(await window.crypto.subtle.exportKey('raw', key))),
     ).toRawBytes(true);
     return {
-      publicKey: toB64(compressedPubkey),
+      publicKey: toBase64(compressedPubkey),
       alg,
       credentialId: credential.id,
     };
