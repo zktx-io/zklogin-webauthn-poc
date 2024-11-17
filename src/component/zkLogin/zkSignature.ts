@@ -1,6 +1,6 @@
 import { decodeJwt } from 'jose';
-import { getZkLoginSignature } from './webAuthn/signature';
 import { genAddressSeed } from '@mysten/zklogin';
+import { getZkLoginSignature } from './webAuthn/signature';
 
 export const getZkSignature = (
   jwt: string,
