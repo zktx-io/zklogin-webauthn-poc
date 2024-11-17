@@ -9,7 +9,8 @@ export const verify = async (
   tx: Uint8Array,
   signature: string | Uint8Array,
 ): Promise<void> => {
-  const bytes = typeof signature === 'string' ? fromBase64(signature) : signature;
+  const bytes =
+    typeof signature === 'string' ? fromBase64(signature) : signature;
   const txHash = sha256(tx);
   if (bytes[0] === 5) {
     const { webAuthn, userSignature } = parseZkLoginSignature(bytes.slice(1));
